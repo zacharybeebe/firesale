@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Lists
+{% endblock %}
+
+{% block header2 %}
+  Lists
+{% endblock %}
+
+
+{% block table_data %}
+  <script type="text/javascript">
+      function row_onclick(event, item_redirect) {
+          window.location.href = item_redirect;
+      }
+
+      function export_onclick(event, item_redirect) {
+          window.location.href = item_redirect;
+      }
+  </script>
+  <p>
+    <input type="button" class="btn btn-dark btn-sm" value="create new list" id="create_new" name="create_new" onclick="export_onclick(event, '{{ url_for('lists', create_new=1) }}')" />
+  </p>
+  {% if create_new %}
+    <form action="#" method="post" id="form_cart">
+      <p><label style="width: 75px; text-align: left; font-weight: bold;">List Name:</label>
+         <input type="text" name="list_name" value="" style="width: 150px;" />
+         <input type="submit" class="btn btn-dark btn-sm" value="create list" /></p>
+    </form>
+  {% endif %}
+  {% if lists %}
+    {% if flash %}
+      <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+    {% endif %}
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            {% for i in HEADER %}
+              <th style="width: 100px;">{{ i }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for key in lists %}
+            <tr style="cursor: pointer;" onclick="row_onclick(event, '{{ url_for('list_', list_=key, order_again=0, delete_list=0) }}')">
+              <td>{{ key }}</td>
+              {% for sub in lists[key] %}
+                {% if sub not in ['cart'] %}
+                  {% if sub == 'datetime' %}
+                    <td>{{ fd(lists[key][sub]) }}</td>
+                  {% elif sub == 'total_price' %}
+                    <td>{{ fp(lists[key][sub]) }}</td>
+                  {% else %}
+                    <td>{{ lists[key][sub] }}</td>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p><h4>No Lists</h4></p>
+  {% endif %}
+{% endblock %}
+

@@ -1,0 +1,23 @@
+{% extends 'base_login.html' %}
+
+
+{% block title %}Home{% endblock %}
+
+
+{% block info %}Home{% endblock %}
+
+{% block home %}
+<script type="text/javascript">
+    function row_onclick(item_redirect) {
+        window.location.href = item_redirect;
+    }
+</script>
+<p>
+    <input type="button" class="btn btn-info btn-lg" value="login" onclick="row_onclick('{{ url_for('login') }}')" />
+    &emsp;&emsp;&emsp;
+    <input type="button" class="btn btn-light btn-lg" value="create" onclick="row_onclick('{{ url_for('create') }}')" />
+</p>
+{% if flash %}
+    <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+{% endif %}
+{% endblock %}

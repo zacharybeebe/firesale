@@ -1,0 +1,7 @@
+pyinstaller -F -n "FireSale v1.0" --add-data "templates;templates" --add-data "static;static" --add-data "NFES_ITEMS.db;." -i=icon.ico app.py
+
+
+
+
+
+

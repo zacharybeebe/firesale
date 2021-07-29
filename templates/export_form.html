@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Order{% endblock %}
+
+{% block header2 %}Create Order{% endblock %}
+
+
+{% block export_form %}
+<script type="text/javascript">
+    function download_onclick(event, item_redirect) {
+        window.location.href = item_redirect;
+    }
+
+</script>
+{% if show_download %}
+    <p style="color: rgba(84, 216, 226, .95);"><b>Form Created Successfully</b></p>
+    <p><input type="button" class="btn btn-dark btn-sm" value="download order" id="download_order" name="download_order" onclick="download_onclick(event, '{{ url_for('export_form', download=1) }}')" /></p>
+{% else %}
+    <form action="#" method="post" id="form_edit">
+        {% for key in form %}
+            <p><label style="width: 250px; text-align: left; font-weight: bold;">{{ key[1:].strip('_') }}:</label>
+                {% if form[key] %}
+                    <input type="text" name="{{ key }}" value="{{ form[key] }}" style="width: 450px;" />
+                {% else %}
+                    <input type="text" name="{{ key }}" value="" style="width: 450px;" />
+                {% endif %}
+            </p>
+        {% endfor %}
+        <span>
+            <p><input type="submit" class="btn btn-dark" value="create order" /></p>
+        </span>
+    </form>
+{% endif %}
+{% endblock %}

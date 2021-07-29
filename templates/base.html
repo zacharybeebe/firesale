@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block style%}{% endblock %}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.82.0">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='assets/dist/css/bs.min.css') }}" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='assets/base_dash.css') }}" rel="stylesheet">
+  </head>
+
+  <body>
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="{{ url_for('search', cache='all', sort=0, prev_sort=1, reverse=0) }}">NFES Ordering</a>
+      <a class="nav-link" href="{{ url_for('orders', download_xl_all=0, download_xl_by_order=0) }}" style="color: rgba(255, 255, 255, .95); text-shadow: 1.5px 1.5px black;"><span data-feather="file-text"></span>&nbsp;Orders</a>
+      <a class="nav-link" href="{{ url_for('lists', create_new=0) }}" style="color: rgba(255, 255, 255, .95); text-shadow: 1.5px 1.5px black;"><span data-feather="archive"></span>&nbsp;Lists</a>
+      <a class="nav-link" href="{{ url_for('cart') }}" style="color: rgba(255, 255, 255, .95); text-shadow: 1.5px 1.5px black;"><span data-feather="shopping-cart"></span>&nbsp;CART ({{ cart_size }})</a>
+      <a class="nav-link" href="{{ url_for('exit') }}" style="color: rgba(255, 255, 255, .95); text-shadow: 1.5px 1.5px black;">Exit</a>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar collapse">
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Caches</span>
+              </h6>
+              {% for c in CACHES %}
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{{ url_for('search', cache=c, sort=0, prev_sort=1, reverse=0) }}">{{ CACHE_NAMES[c] }} ({{ c }})</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <select class="subMenuSelect form-control d-md-none mb-5" aria-label="Sidebar page navigation" onchange="location = this.value;">
+              <option value="">Caches</option>
+              {% for c in CACHES %}
+                <option value="{{ url_for('search', cache=c, sort=0, prev_sort=1, reverse=0) }}">{{ CACHE_NAMES[c] }} ({{ c }})</option>
+              {% endfor %}
+            </select>
+
+            <h1 class="h2">{% block header2 %}{% endblock %}</h1>
+          </div>
+
+          <!--<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
+
+          {% block table_data %}{% endblock %}
+          {% block cart_data %}{% endblock %}
+          {% block item_ind %}{% endblock %}
+          {% block export_form %}{% endblock %}
+        </main>
+      </div>
+    </div>
+
+
+    <script src="{{ url_for('static', filename='assets/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='assets/dist/js/dashboard.js') }}"></script>
+
+  </body>
+</html>

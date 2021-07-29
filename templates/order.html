@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Order # {{ order }}
+{% endblock %}
+
+{% block header2 %}
+  Order # {{ order }}
+{% endblock %}
+
+
+{% block table_data %}
+  <script type="text/javascript">
+      function export_onclick(event, item_redirect) {
+          window.location.href = item_redirect;
+      }
+  </script>
+  <div class="table-responsive">
+    <p>
+      <input type="button" class="btn btn-dark btn-sm" value="download pdf" id="download_pdf" name="download_pdf" onclick="export_onclick(event, '{{ url_for('order', order=order, download_pdf=1, download_xl=0, order_again=0) }}')" />
+      <input type="button" class="btn btn-dark btn-sm" value="download excel" id="download_excel" name="download_excel" onclick="export_onclick(event, '{{ url_for('order', order=order, download_pdf=0, download_xl=1, order_again=0) }}')" />
+      <input type="button" class="btn btn-info btn-sm" value="add order items to cart" id="order_again" name="order_again" onclick="export_onclick(event, '{{ url_for('order', order=order, download_pdf=0, download_xl=0, order_again=1) }}')" />
+
+    </p>
+    {% if flash %}
+      <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+    {% endif %}
+
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          {% for i in HEADER %}
+            <th style="width: 100px;">{{ i }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for key in show_cart %}
+          <tr style="cursor: pointer;" onclick="row_onclick(event, '{{ url_for('item', item=show_cart[key]['NFES #']) }}')">
+            {% for sub in show_cart[key] %}
+              {% if sub == 'PRICE PER ITEM' or sub == 'PRICE TOTAL' %}
+                <td>{{ fp(show_cart[key][sub]) }}</td>
+              {% else %}
+                <td>{{ show_cart[key][sub] }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h6>Total Price: </h6><h6>{{ fp(total_price) }}</h6>
+    <p>&emsp;</p>
+    <h6>Date Ordered: </h6><h6>{{ fd(date) }}</h6>
+  </div>
+{% endblock %}
+

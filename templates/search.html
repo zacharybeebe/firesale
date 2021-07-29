@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {% if cache == 'all' %}
+    ALL CACHES
+  {% else %}
+    {{ CACHE_NAMES[cache] }} ({{ cache }})
+  {% endif %}
+{% endblock %}
+
+{% block header2 %}
+  {% if cache == 'all' %}
+    ALL CACHES
+  {% else %}
+    {{ CACHE_NAMES[cache] }} ({{ cache }})
+  {% endif %}
+{% endblock %}
+
+
+{% block table_data %}
+<script type="text/javascript">
+    function submit() {
+        var form = document.getElementById("form_filter");
+        form.submit();
+    }
+
+    function submit_list_on() {
+       var list_on = document.getElementById("list_on");
+       list_on.value = 'list_on';
+
+       var form = document.getElementById("form_filter");
+        form.submit();
+    }
+
+    function select_all_items(checkbox_ultimo) {
+        var add_cart = document.getElementById("add_cart");
+        var add_list = document.getElementById("add_list");
+        const checkboxes = document.querySelectorAll(".form-check-input");
+
+        if (checkbox_ultimo.checked) {
+          for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
+          }
+          add_cart.style = "visibility: visible;";
+          add_list.style = "visibility: visible;";
+        } else {
+          for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+          }
+          add_cart.style = "visibility: hidden;";
+          add_list.style = "visibility: hidden;";
+        }
+    }
+
+    function unhide_add() {
+        var add_cart = document.getElementById("add_cart");
+        var add_list = document.getElementById("add_list");
+        const checkboxes = document.querySelectorAll(".form-check-input");
+        var visible = false;
+        for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].checked) {
+            visible = true;
+            break;
+          }
+        }
+        if (visible) {
+          add_cart.style = "visibility: visible;";
+          add_list.style = "visibility: visible;";
+        } else{
+          add_cart.style = "visibility: hidden;";
+          add_list.style = "visibility: hidden;";
+        }
+    }
+
+    function unhide_list() {
+        var list_select = document.getElementById("list");
+        list_select.style = "visibility: visible;";
+    }
+
+    function row_onclick(event, item_redirect) {
+        var elem = event.srcElement;
+        if (elem.type != 'checkbox'){
+          window.location.href = item_redirect;
+        }
+    }
+</script>
+{% if flash %}
+    <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+{% endif %}
+<form action="#" class="form-inline" method="post" id="form_filter">
+  <div class="form-group">
+    <div class="row">
+      <div class="span" style="clear: both;">
+        <span class="form-inline">
+          <input type="button" class="form-group btn btn-dark btn-sm" value="add to cart" id="add_cart" name="add_cart" onclick="submit()" style=" visibility: hidden;" />
+
+          <input type="button" class="form-group btn btn-info btn-sm" value="add to list" id="add_list" name="add_list" onclick="unhide_list()" style="visibility: hidden;" />
+
+          <select class="form-group form-select-sm mb-3" aria-label=".form-select-lg example" name="list" id="list" style="visibility: hidden; width:150px;" onchange="submit_list_on()">
+            <option value="default">Lists</option>
+            {% for list in lists %}
+               <option value="{{ list }}">{{ list }}</option>
+            {% endfor %}
+          </select>
+          <input class="form-group" type="text" style="visibility: hidden;" name="list_on" id="list_on" value="list_off" />
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="span" style="clear: both;">
+        <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" name="nfes" id="nfes" style="width: 175px; display: inline;" onchange="submit()">
+          {% if nfes == 'all' %}
+            <option value="all">NFES # RANGE</option>
+          {% else %}
+            <option value="{{ nfes }}">{{ nfes[0] }} - {{ nfes[1] }}</option>
+            <option value="all">All Numbers</option>
+          {% endif %}
+
+          {% for rng in NFES %}
+            {% if rng != nfes %}
+              <option value="{{ rng }}">{{ rng[0] }} - {{ rng[1] }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+
+        {% for i in [['ITEM CLASS', cls, CLASS, 'All Classes', 'cls'], ['ITEM PRODUCT', product, PRODUCTS, 'All Products', 'product'], ['ITEM TYPE', types, TYPES, 'All Types', 'types']] %}
+          <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" name="{{ i[-1] }}" id="{{ i[-1] }}" style="width: 275px; display: inline;" onchange="submit()">
+            {% if i[1] == 'all' %}
+              <option value="all">{{ i[0] }}</option>
+            {% else %}
+              <option value="{{ i[1] }}">{{ i[1] }}</option>
+              <option value="all">{{ i[3] }}</option>
+            {% endif %}
+            {% for j in i[2] %}
+              {% if j != i[1] %}
+                <option value="{{ j }}">{{ j }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <small>{{ len_items }} Items</small>
+  <div class="form-group">
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            {% for i in range(HEADER|length) %}
+              {% if i == 0 %}
+                <th style="width: 15px;"><input class="form-check-input" type="checkbox" id="select_all" name="select_all" onclick="select_all_items(this)"></th>
+              {% else %}
+                <th style="width: 50px;"><a href="{{ url_for('search', cache=cache, sort=i-1, prev_sort=prev_sort, reverse=reverse) }}" style="color: black; text-decoration: none; font-weight: bold;">{{ HEADER[i] }}</a></th>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in items %}
+            <tr style="cursor: pointer;" onclick="row_onclick(event, '{{ url_for('item', item=item[0]) }}')">
+            <td><input class="form-check-input" type="checkbox" id="cbx_{{ item[0] }}" name="cbx_{{ item[0] }}" onclick="unhide_add()"></td>
+              {% for i in range(item|length) %}
+                {% if i == 5 %}
+                  <td>{{ fp(item[i]) }}</td>
+                {% else %}
+                  <td>{{ item[i] }}</td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+ </form>
+{% endblock %}
+

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Cart
+{% endblock %}
+
+{% block header2 %}
+  Cart
+{% endblock %}
+
+
+{% block table_data %}
+<script type="text/javascript">
+    function submit() {
+        var form = document.getElementById("form_cart");
+        form.submit();
+    }
+
+    function export_onclick(event, item_redirect) {
+        window.location.href = item_redirect;
+    }
+
+    function row_onclick(event, item_redirect) {
+        var elem = event.srcElement;
+        if (elem.type != 'text'){
+          window.location.href = item_redirect;
+        }
+    }
+</script>
+
+{% if show_cart %}
+  <p>
+    <input type="button" class="btn btn-dark btn-sm" value="update cart" id="update_cart" name="update_cart" onclick="submit()" />
+    <input type="button" class="btn btn-dark btn-sm" value="export order" id="export_order" name="export_order" onclick="export_onclick(event, '{{ url_for('export') }}')" />
+    <input type="button" class="btn btn-danger btn-sm" value="clear cart" id="clear_cart" name="clear_cart" onclick="export_onclick(event, '{{ url_for('clear_cart') }}')" />
+
+  </p>
+
+  <form action="#" method="post" id="form_cart">
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            {% for i in HEADER %}
+              <th style="width: 100px;">{{ i }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for key in show_cart %}
+            <tr style="cursor: pointer;" onclick="row_onclick(event, '{{ url_for('item', item=show_cart[key]['NFES #']) }}')">
+              {% for sub in show_cart[key] %}
+                {% if sub == 'QUANTITY' %}
+                  <td><input type="text" name="{{ key }}_{{ sub }}" value="{{ show_cart[key][sub] }}"/></td>
+                {% else %}
+                  {% if sub == 'PRICE PER ITEM' or sub == 'PRICE TOTAL' %}
+                    <td>{{ fp(show_cart[key][sub]) }}</td>
+                  {% else %}
+                    <td>{{ show_cart[key][sub] }}</td>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <h6>Total Price: </h6><h6>{{ fp(total_price) }}</h6>
+    </div>
+   </form>
+{% else %}
+  <p><h4>No Items in Cart</h4></p>
+{% endif %}
+{% endblock %}
+

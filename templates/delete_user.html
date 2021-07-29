@@ -1,0 +1,15 @@
+<div style="  position: absolute; width: 300px; height: 100%; z-index: 15; top: 40%; left: 50%; margin: -100px 0 0 -150px;">
+    {% if flash %}
+        <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+    {% endif %}
+    <p>Delete User</p>
+    <form action="#" method="post" id="form_user">
+        <p><label style="width: 150px; font-weight: bold;">Username</label></p>
+        <p><input type="text" name="user" value="" style="width: 250px;" /></p>
+        <p><button type="submit" class="btn btn-dark">delete</button></p>
+    </form>
+    {% for i in range(2) %}
+        <p>&emsp;</p>
+    {% endfor %}
+    <a href="{{ url_for('exit') }}" style="color: black">Exit</a>
+</div>

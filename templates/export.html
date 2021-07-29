@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Export Order
+{% endblock %}
+
+{% block header2 %}
+  Export Order
+{% endblock %}
+
+
+{% block table_data %}
+<script type="text/javascript">
+    function submit() {
+        var form = document.getElementById("form_order");
+        form.submit();
+    }
+
+    function select_all_jobs(checkbox_ultimo) {
+        var delete_cart = document.getElementById("delete_cart");
+        const checkboxes = document.querySelectorAll(".form-check-input");
+
+        if (checkbox_ultimo.checked) {
+          for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
+          }
+          delete_cart.style = "visibility: visible;";
+        } else {
+          for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+          }
+          delete_cart.style = "visibility: hidden;";
+        }
+    }
+
+    function unhide_delete() {
+        var delete_cart = document.getElementById("delete_cart");
+        const checkboxes = document.querySelectorAll(".form-check-input");
+        var visible = false;
+        for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].checked) {
+            visible = true;
+            break;
+          }
+        }
+        if (visible) {
+          delete_cart.style = "visibility: visible;";
+        } else{
+          delete_cart.style = "visibility: hidden;";
+        }
+    }
+</script>
+{% if flash %}
+  <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+{% endif %}
+<form action="#" method="post" id="form_order">
+  {% if not error %}
+    <div class="row">
+      <div class="span" style="clear: both;">
+        <h4>Select Cache to Order From</h4>
+        <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" name="cache" id="cache" style="width: 175px; display: inline;" onchange="submit()">
+          <option value="default">CACHE</option>
+          {% for cache in CACHE_NAMES %}
+            <option value="{{ cache }}">{{ CACHE_NAMES[cache] }} ({{ cache }})</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  {% else %}
+    <div class="table-responsive">
+      <p><input type="button" class="btn btn-dark btn-sm" value="delete from cart" id="delete_cart" name="delete_cart" onclick="submit()" /></p>
+      <small>{{ err_num_items }} Items</small>
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            {% for i in range(HEADER|length) %}
+              {% if i == 0 %}
+                <th style="width: 15px;"><input class="form-check-input" checked type="checkbox" id="select_all" name="select_all"  style="visibility: hidden;" onclick="select_all_jobs(this)"></th>
+              {% else %}
+                <th style="width: 50px;">{{ HEADER[i] }}</th>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in items %}
+            <tr>
+            <td><input class="form-check-input" type="checkbox" checked id="cbx_{{ item[0] }}" name="cbx_{{ item[0] }}" style="visibility: hidden;"onclick="unhide_delete()"></td>
+              {% for i in range(item|length) %}
+                {% if i == 5 %}
+                  <td>{{ fp(item[i]) }}</td>
+                {% else %}
+                  <td>{{ item[i] }}</td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+ </form>
+{% endblock %}
+

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}NFES # {{ item }}{% endblock %}
+
+{% block header2 %}NFES # {{ item }} {% endblock %}
+
+
+{% block item_ind %}
+<script type="text/javascript">
+    function submit() {
+        var form = document.getElementById("form_item");
+        form.submit();
+    }
+
+    function submit_list_on() {
+       var list_on = document.getElementById("list_on");
+       list_on.value = 'list_on';
+
+       var form = document.getElementById("form_item");
+        form.submit();
+    }
+
+    function unhide_list() {
+        var list_select = document.getElementById("list");
+        list_select.style = "visibility: visible;";
+    }
+</script>
+{% if flash %}
+    <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+{% endif %}
+<form action="#" method="post" id="form_item">
+    {% for key in item_info %}
+        {% if key == 'PRICE' %}
+            <p><label style="width: 150px; text-align: left; font-weight: bold;">{{ key }}:</label><label style="width: 700px; text-align: left;">{{ fp(item_info[key]) }}</label></p>
+        {% else %}
+            <p><label style="width: 150px; text-align: left; font-weight: bold;">{{ key }}:</label><label style="width: 700px; text-align: left;">{{ item_info[key] }}</label></p>
+        {% endif %}
+    {% endfor%}
+    <p><label style="width: 150px; text-align: left; font-weight: bold;">Quantity:</label><input type="text" name="qty" value="0" style="width: 250px;" /></p>
+    <p>
+        <input type="button" class="btn btn-dark" value="add to cart" onclick="submit()" />
+        <input type="button" class="btn btn-info" value="add to list" onclick="unhide_list()" />
+        <select class="form-group form-select-sm mb-3" aria-label=".form-select-lg example" name="list" id="list" style="visibility: hidden; width:150px;" onchange="submit_list_on()">
+            <option value="default">Lists</option>
+            {% for list in lists %}
+               <option value="{{ list }}">{{ list }}</option>
+            {% endfor %}
+          </select>
+      <input class="form-group" type="text" style="visibility: hidden;" name="list_on" id="list_on" value="list_off" />
+    </p>
+    </form>
+{% endblock %}

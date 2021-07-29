@@ -1,0 +1,18 @@
+{% extends 'base_login.html' %}
+
+
+{% block title %}Login{% endblock %}
+
+
+{% block info %}Login{% endblock %}
+
+
+{% block login %}
+    <form action="#" method="post">
+        <p style="color: rgba(255, 255, 255, .95); text-shadow: 1.5px 1.5px black;">Username:&emsp;<input type="text" name="user" value="" /></p>
+        <p><input type="submit" class="btn btn-light" value="login" /></p>
+    </form>
+    {% if flash %}
+        <p style="color: rgba(84, 216, 226, .95);"><b>{{ flash }}</b></p>
+    {% endif %}
+{% endblock %}
