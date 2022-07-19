@@ -130,7 +130,6 @@ def search(cache, sort, prev_sort, reverse):
         TYPES = sorted(CATEGORIES[w.cls][w.product])
     except KeyError:
         TYPES = []
-
     w.update_self(app.config['USER_DB_PATH'])
     return render_template('search.html', items=items, len_items=len(items), cache=w.cache, nfes=w.nfes, cls=w.cls, product=w.product,
                            types=w.types, sort=w.sort, prev_sort=w.prev_sort, reverse=w.reverse, cart_size=w.cart_size, flash=flash,

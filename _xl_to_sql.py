@@ -1,9 +1,13 @@
 from sqlite3 import connect
 from openpyxl import load_workbook
 
+TEST_NEW = False
+CACHE = 'nfes_items_2022.xlsx'
 
-CACHE = 'nfes_items.xlsx'
-DB = 'NFES_ITEMS.db'
+if TEST_NEW:
+    DB = 'TEST_NEW.db'
+else:
+    DB = 'NFES_ITEMS.db'
 
 CACHES = ['AKK', 'BFK', 'CDK', 'GBK', 'LGK', 'LSK', 'NCK', 'NEK', 'NRK', 'NWK', 'PFK', 'RMK', 'SAK', 'SFK', 'WFK']
 

@@ -7,6 +7,7 @@ from os.path import (join,
                      isfile)
 from sqlite3 import connect
 
+YEAR = '2022'
 
 USER_ARGS = {'user': 'TEXT',
              'cache': 'TEXT',
@@ -53,9 +54,9 @@ def make_directory_for_user_db():
 DB = resource_path('NFES_ITEMS.db')
 
 SEARCH_HEADER = ['', 'NFES #', 'DESCRIPTION', 'ITEM CLASS', 'ITEM PRODUCT', 'ITEM TYPE', 'PRICE', 'U/I', 'STD PACKAGE', 'CACHES AVAILABLE']
-SQL_SEARCH_HEADER = ['NFES NO SHORT', 'DESCRIPTION', 'CLASS', 'PROD LINE', 'TYPE', '2021 PRICE', 'U/I', 'STD PK', 'CACHES STOCKING']
+SQL_SEARCH_HEADER = ['NFES NO SHORT', 'DESCRIPTION', 'CLASS', 'PROD LINE', 'TYPE', f'{YEAR} PRICE', 'U/I', 'STD PK', 'CACHES STOCKING']
 
-EXCEL_SQL_HEADER = [['"NFES NO SHORT"', 2], ['"TYPE"', 7], ['"NSN (IF ANY)"', 8], ['"DESCRIPTION"', 6], ['"U/I"', 4], ['"2021 PRICE"', 9],
+EXCEL_SQL_HEADER = [['"NFES NO SHORT"', 2], ['"TYPE"', 7], ['"NSN (IF ANY)"', 8], ['"DESCRIPTION"', 6], ['"U/I"', 4], [f'"{YEAR} PRICE"', 9],
                     ['"PROD LINE"', 10], ['"CLASS"', 11], ['"WT (LB)"', 12], ['"HT (IN)"', 13], ['"LN (IN)"', 14], ['"WD (IN)"', 15],
                     ['"CUBIC FT"', 16], ['"STD PK"', 17], ['"REMARKS"', 18], ['"CACHES STOCKING"', 19]]
 
@@ -65,7 +66,7 @@ ITEM_COLS = {'NFES NO SHORT': 'NFES #',
              'TYPE': 'TYPE',
              'DESCRIPTION': 'DESCRIPTION',
              'U/I': 'U/I',
-             '2021 PRICE': 'PRICE',
+             f'{YEAR} PRICE': 'PRICE',
              'PROD LINE': 'PRODUCT',
              'CLASS': 'CLASS',
              'WT (LB)': 'WEIGHT (lb)',
@@ -81,7 +82,7 @@ CART_COLS = {'NFES NO SHORT': 'NFES #',
              'TYPE': 'TYPE',
              'DESCRIPTION': 'DESCRIPTION',
              'U/I': 'U/I',
-             '2021 PRICE': 'PRICE PER ITEM',
+             f'{YEAR} PRICE': 'PRICE PER ITEM',
              'STD PK': 'STANDARD PACK'}
 
 CART_HEADER = ['S #', 'NFES #', 'TYPE', 'DESCRIPTION', 'U/I', 'PRICE PER ITEM', 'PRICE TOTAL', 'STANDARD PACK', 'QUANTITY']
